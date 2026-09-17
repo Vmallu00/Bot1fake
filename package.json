@@ -1,0 +1,23 @@
+{
+  "name": "fakepixel-skyblock-builder",
+  "version": "2.0.0",
+  "private": true,
+  "description": "FakePixel SkyBlock 1.8.9 bot and web control panel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "mineflayer": "^4.31.0",
+    "mineflayer-pathfinder": "^2.4.5",
+    "prismarine-nbt": "^2.7.0",
+    "minecraft-data": "^3.99.0",
+    "multer": "^1.4.5-lts.2",
+    "socket.io": "^4.8.1"
+  }
+}
