@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#0b0b12"
+  >
+
+  <title>FakePixel SkyBlock Builder</title>
+
+  <link
+    rel="stylesheet"
+    href="/style.css"
+  >
+
+  <script
+    src="/socket.io/socket.io.js"
+    defer
+  ></script>
+
+  <script
+    src="/app.js"
+    defer
+  ></script>
+</head>
+
+<body>
+
+  <div id="app">
+
+    <!-- =========================
+         Sidebar
+    ========================== -->
+
+    <aside class="sidebar">
+
+      <div class="brand">
+        <div class="brand-icon">✦</div>
+
+        <div>
+          <h1>FakePixel</h1>
+          <span>SkyBlock Builder</span>
+        </div>
+      </div>
+
+      <nav class="navigation">
+
+        <button
+          class="nav-item active"
+          data-page="dashboard"
+        >
+          <span>⌂</span>
+          Dashboard
+        </button>
+
+        <button
+          class="nav-item"
+          data-page="bots"
+        >
+          <span>●</span>
+          Bots
+        </button>
+
+        <button
+          class="nav-item"
+          data-page="schematics"
+        >
+          <span>▦</span>
+          Schematics
+        </button>
+
+        <button
+          class="nav-item"
+          data-page="builds"
+        >
+          <span>◆</span>
+          Builds
+        </button>
+
+        <button
+          class="nav-item"
+          data-page="trades"
+        >
+          <span>⇄</span>
+          Trades
+        </button>
+
+        <button
+          class="nav-item"
+          data-page="coop"
+        >
+          <span>♟</span>
+          Co-op
+        </button>
+
+        <button
+          class="nav-item"
+          data-page="console"
+        >
+          <span>›_</span>
+          Console
+        </button>
+
+        <button
+          class="nav-item"
+          data-page="errors"
+        >
+          <span>!</span>
+          Errors
+        </button>
+
+      </nav>
+
+      <div class="sidebar-bottom">
+
+        <div class="connection-box">
+
+          <span
+            id="connectionDot"
+            class="connection-dot offline"
+          ></span>
+
+          <div>
+            <strong id="connectionText">
+              Connecting...
+            </strong>
+
+            <small>
+              Control panel
+            </small>
+          </div>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+
+    <!-- =========================
+         Main
+    ========================== -->
+
+    <main class="main">
+
+      <header class="topbar">
+
+        <div>
+          <h2 id="pageTitle">
+            Dashboard
+          </h2>
+
+          <p id="pageSubtitle">
+            FakePixel SkyBlock automation control
+          </p>
+        </div>
+
+        <div class="topbar-actions">
+
+          <button
+            id="refreshButton"
+            class="icon-button"
+            title="Refresh"
+          >
+            ↻
+          </button>
+
+          <button
+            id="mobileMenuButton"
+            class="icon-button mobile-only"
+            title="Menu"
+          >
+            ☰
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <!-- =========================
+           Dashboard
+      ========================== -->
+
+      <section
+        id="page-dashboard"
+        class="page active"
+      >
+
+        <div class="stats-grid">
+
+          <div class="stat-card">
+
+            <div class="stat-icon">
+              ●
+            </div>
+
+            <div>
+              <span>Online Bots</span>
+
+              <strong id="statOnlineBots">
+                0
+              </strong>
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-icon">
+              ◆
+            </div>
+
+            <div>
+              <span>Active Builds</span>
+
+              <strong id="statActiveBuilds">
+                0
+              </strong>
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-icon">
+              ▦
+            </div>
+
+            <div>
+              <span>Schematics</span>
+
+              <strong id="statSchematics">
+                0
+              </strong>
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-icon">
+              !
+            </div>
+
+            <div>
+              <span>Errors</span>
+
+              <strong id="statErrors">
+                0
+              </strong>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-grid">
+
+          <div class="panel">
+
+            <div class="panel-header">
+
+              <div>
+                <h3>Bot Status</h3>
+                <span>Live Minecraft connections</span>
+              </div>
+
+              <button
+                class="small-button"
+                data-page="bots"
+              >
+                View all
+              </button>
+
+            </div>
+
+            <div
+              id="dashboardBots"
+              class="bot-list"
+            >
+              <div class="empty-state">
+                No bots configured.
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="panel">
+
+            <div class="panel-header">
+
+              <div>
+                <h3>Build Progress</h3>
+                <span>Current automation jobs</span>
+              </div>
+
+              <button
+                class="small-button"
+                data-page="builds"
+              >
+                View all
+              </button>
+
+            </div>
+
+            <div
+              id="dashboardBuilds"
+              class="build-list"
+            >
+              <div class="empty-state">
+                No active builds.
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="panel-header">
+
+            <div>
+              <h3>Live Activity</h3>
+              <span>Latest bot events</span>
+            </div>
+
+          </div>
+
+          <div
+            id="dashboardActivity"
+            class="activity-list"
+          >
+            <div class="empty-state">
+              Waiting for activity...
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           Bots
+      ========================== -->
+
+      <section
+        id="page-bots"
+        class="page"
+      >
+
+        <div class="page-actions">
+
+          <div>
+            <h3>Bot Management</h3>
+            <p>
+              Add and control your FakePixel Minecraft bots.
+            </p>
+          </div>
+
+          <button
+            id="addBotButton"
+            class="primary-button"
+          >
+            + Add Bot
+          </button>
+
+        </div>
+
+
+        <div
+          id="botsContainer"
+          class="cards-grid"
+        >
+          <div class="empty-state">
+            No bots configured.
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           Schematics
+      ========================== -->
+
+      <section
+        id="page-schematics"
+        class="page"
+      >
+
+        <div class="page-actions">
+
+          <div>
+            <h3>Schematics</h3>
+            <p>
+              Upload and inspect Minecraft schematic files.
+            </p>
+          </div>
+
+          <button
+            id="uploadSchematicButton"
+            class="primary-button"
+          >
+            + Upload Schematic
+          </button>
+
+        </div>
+
+
+        <input
+          id="schematicFile"
+          type="file"
+          accept=".schem,.schematic"
+          hidden
+        >
+
+
+        <div
+          id="schematicsContainer"
+          class="cards-grid"
+        >
+          <div class="empty-state">
+            No schematics uploaded.
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           Builds
+      ========================== -->
+
+      <section
+        id="page-builds"
+        class="page"
+      >
+
+        <div class="page-actions">
+
+          <div>
+            <h3>Build Manager</h3>
+            <p>
+              Create, pause, resume and monitor builds.
+            </p>
+          </div>
+
+          <button
+            id="newBuildButton"
+            class="primary-button"
+          >
+            + New Build
+          </button>
+
+        </div>
+
+
+        <div
+          id="buildsContainer"
+          class="builds-container"
+        >
+          <div class="empty-state">
+            No builds created.
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           Trades
+      ========================== -->
+
+      <section
+        id="page-trades"
+        class="page"
+      >
+
+        <div class="page-actions">
+
+          <div>
+            <h3>Trade Center</h3>
+            <p>
+              Verify incoming trades and materials.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div
+          id="tradesContainer"
+          class="table-wrapper"
+        >
+          <div class="empty-state">
+            No trades.
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           Co-op
+      ========================== -->
+
+      <section
+        id="page-coop"
+        class="page"
+      >
+
+        <div class="page-actions">
+
+          <div>
+            <h3>Co-op Requests</h3>
+            <p>
+              Review incoming FakePixel co-op requests.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div
+          id="coopContainer"
+          class="cards-grid"
+        >
+          <div class="empty-state">
+            No pending co-op requests.
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           Console
+      ========================== -->
+
+      <section
+        id="page-console"
+        class="page"
+      >
+
+        <div class="console-layout">
+
+          <div class="panel console-panel">
+
+            <div class="panel-header">
+
+              <div>
+                <h3>Live Console</h3>
+                <span>
+                  Minecraft bot output
+                </span>
+              </div>
+
+              <button
+                id="clearConsoleButton"
+                class="small-button"
+              >
+                Clear
+              </button>
+
+            </div>
+
+            <div
+              id="consoleOutput"
+              class="console-output"
+            ></div>
+
+          </div>
+
+
+          <div class="panel command-panel">
+
+            <div class="panel-header">
+
+              <div>
+                <h3>Command</h3>
+                <span>
+                  Send a Minecraft command
+                </span>
+              </div>
+
+            </div>
+
+            <div class="command-form">
+
+              <select id="commandBot">
+                <option value="">
+                  Select bot
+                </option>
+              </select>
+
+              <input
+                id="commandInput"
+                type="text"
+                placeholder="/skyblock"
+                autocomplete="off"
+              >
+
+              <button
+                id="sendCommandButton"
+                class="primary-button"
+              >
+                Send
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           Errors
+      ========================== -->
+
+      <section
+        id="page-errors"
+        class="page"
+      >
+
+        <div class="page-actions">
+
+          <div>
+            <h3>Error Log</h3>
+            <p>
+              Connection and automation errors.
+            </p>
+          </div>
+
+          <button
+            id="clearErrorsButton"
+            class="danger-button"
+          >
+            Clear Errors
+          </button>
+
+        </div>
+
+
+        <div
+          id="errorsContainer"
+          class="error-list"
+        >
+          <div class="empty-state">
+            No errors.
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- =========================
+       Add Bot Modal
+  ========================== -->
+
+  <div
+    id="botModal"
+    class="modal hidden"
+  >
+
+    <div class="modal-box">
+
+      <div class="modal-header">
+
+        <div>
+          <h3>Add Minecraft Bot</h3>
+          <span>
+            Configure a FakePixel account
+          </span>
+        </div>
+
+        <button
+          class="modal-close"
+          data-close-modal="botModal"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <form id="botForm">
+
+        <label>
+          Bot ID
+          <input
+            id="botId"
+            name="id"
+            required
+            placeholder="text1"
+          >
+        </label>
+
+
+        <label>
+          Minecraft Username
+          <input
+            id="botUsername"
+            name="username"
+            required
+            placeholder="vmai001"
+          >
+        </label>
+
+
+        <label>
+          FakePixel Password
+          <input
+            id="botPassword"
+            name="password"
+            type="password"
+            required
+            placeholder="Password"
+          >
+        </label>
+
+
+        <label>
+          Target Island Username
+          <input
+            id="botTarget"
+            name="targetUsername"
+            placeholder="V_Mallu_Gamer"
+          >
+        </label>
+
+
+        <div class="form-row">
+
+          <label>
+            Host
+            <input
+              id="botHost"
+              name="host"
+              value="mc.fakepixel.me"
+            >
+          </label>
+
+          <label>
+            Port
+            <input
+              id="botPort"
+              name="port"
+              type="number"
+              value="25565"
+            >
+          </label>
+
+        </div>
+
+
+        <label class="checkbox-row">
+
+          <input
+            id="botAutoReconnect"
+            type="checkbox"
+            checked
+          >
+
+          <span>
+            Automatic reconnect
+          </span>
+
+        </label>
+
+
+        <label class="checkbox-row">
+
+          <input
+            id="botAntiAfk"
+            type="checkbox"
+            checked
+          >
+
+          <span>
+            Anti-AFK
+          </span>
+
+        </label>
+
+
+        <div class="modal-actions">
+
+          <button
+            type="button"
+            class="secondary-button"
+            data-close-modal="botModal"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="primary-button"
+          >
+            Add Bot
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       Build Modal
+  ========================== -->
+
+  <div
+    id="buildModal"
+    class="modal hidden"
+  >
+
+    <div class="modal-box">
+
+      <div class="modal-header">
+
+        <div>
+          <h3>Create Build</h3>
+          <span>
+            Select schematic and target position
+          </span>
+        </div>
+
+        <button
+          class="modal-close"
+          data-close-modal="buildModal"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <form id="buildForm">
+
+        <label>
+          Build Name
+          <input
+            id="buildName"
+            required
+            placeholder="Castle"
+          >
+        </label>
+
+
+        <label>
+          Bot
+          <select
+            id="buildBot"
+            required
+          >
+            <option value="">
+              Select bot
+            </option>
+          </select>
+        </label>
+
+
+        <label>
+          Schematic
+          <select
+            id="buildSchematic"
+            required
+          >
+            <option value="">
+              Select schematic
+            </option>
+          </select>
+        </label>
+
+
+        <label>
+          Target Island
+          <input
+            id="buildTarget"
+            placeholder="V_Mallu_Gamer"
+          >
+        </label>
+
+
+        <div class="form-row">
+
+          <label>
+            X
+            <input
+              id="buildX"
+              type="number"
+              required
+              value="0"
+            >
+          </label>
+
+          <label>
+            Y
+            <input
+              id="buildY"
+              type="number"
+              required
+              value="64"
+            >
+          </label>
+
+          <label>
+            Z
+            <input
+              id="buildZ"
+              type="number"
+              required
+              value="0"
+            >
+          </label>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+          <button
+            type="button"
+            class="secondary-button"
+            data-close-modal="buildModal"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="primary-button"
+          >
+            Create Build
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       Schematic Inspect Modal
+  ========================== -->
+
+  <div
+    id="inspectModal"
+    class="modal hidden"
+  >
+
+    <div class="modal-box large">
+
+      <div class="modal-header">
+
+        <div>
+          <h3 id="inspectTitle">
+            Schematic
+          </h3>
+
+          <span>
+            Material requirements
+          </span>
+        </div>
+
+        <button
+          class="modal-close"
+          data-close-modal="inspectModal"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div
+        id="inspectContent"
+        class="inspect-content"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       Toasts
+  ========================== -->
+
+  <div
+    id="toastContainer"
+    class="toast-container"
+  ></div>
+
+</body>
+</html>
